@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pet Recovery App Prototype</title>
+    <style>
+        /* ==================================================
+           GLOBAL STYLES & VARIABLES
+           ================================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700&display=swap');
+
+        :root {
+            --bg-cream: #FFFDF9;
+            --btn-brown: #A88B7D;
+            --btn-light: #EBE3DB;
+            --input-bg: #F4EFEA;
+            --text-dark: #33221B;
+            --border-dark: #33221B;
+            
+            --font-hand: 'Patrick Hand', cursive;
+            --font-clean: 'Nunito', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #E0DCD6; /* Darker background to highlight the mobile screen */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: var(--font-clean);
+            color: var(--text-dark);
+        }
+
+        /* Mobile Screen Container */
+        #app-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 850px;
+            background-color: var(--bg-cream);
+            border: 2px solid var(--border-dark);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 400px) {
+            #app-container {
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        /* Screen Sections */
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            padding: 40px 30px;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1, h2 {
+            font-family: var(--font-hand);
+            font-size: 32px;
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            line-height: 1.2;
+        }
+
+        p {
+            font-family: var(--font-clean);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Forms & Inputs */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-family: var(--font-clean);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            margin-left: 10px;
+        }
+
+        input {
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-dark);
+            border-radius: 20px;
+            padding: 12px 15px;
+            font-family: var(--font-clean);
+            font-size: 16px;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #000;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: var(--font-hand);
+            font-size: 22px;
+            border: 2px solid var(--border-dark);
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background-color: var(--btn-brown);
+        }
+
+        .btn-secondary {
+            background-color: var(--btn-light);
+        }
+
+        .link-back {
+            margin-top: auto;
+            font-family: var(--font-clean);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        /* Specific Screen Styles */
+        /* Screen 1: Welcome */
+        .pet-illustration {
+            width: 80%;
+            max-width: 200px;
+            margin: auto;
+            border-radius: 20px;
+        }
+
+        .welcome-buttons {
+            margin-top: auto;
+        }
+
+        /* Screen 3: Grid */
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .grid-btn {
+            background-color: var(--btn-brown);
+            border: 2px solid var(--border-dark);
+            border-radius: 20px;
+            padding: 20px 10px;
+            font-family: var(--font-hand);
+            font-size: 18px;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.1;
+            min-height: 120px;
+        }
+        
+        .grid-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Dashboard Placeholder */
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--btn-light);
+            border-top: 2px solid var(--border-dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-radius: 0 0 28px 28px;
+        }
+
+        .nav-item {
+            font-family: var(--font-hand);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <!-- SCREEN 1: WELCOME -->
+        <div id="screen-welcome" class="screen active">
+            <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                <!-- Placeholder for the dog illustration from Capture (15).JPG -->
+                <img src="https://api.dicebear.com/7.x/shapes/svg?seed=dog&backgroundColor=EBE3DB" alt="Cute dog illustration" class="pet-illustration" style="background: transparent;">
+            </div>
+            <div class="welcome-buttons">
+                <button class="btn btn-primary" onclick="navTo('screen-register')">crear cuenta</button>
+                <button class="btn btn-secondary" onclick="navTo('screen-login')">¿ya tienes una cuenta?</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: CREATE ACCOUNT -->
+        <div id="screen-register" class="screen">
+            <h1>Crear una cuenta</h1>
+            
+            <div class="input-group">
+                <label>nombre de usuario</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-group">
+                <label>correo electrónico /<br>número de celular</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-group">
+                <label>contraseña</label>
+                <input type="password">
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="navTo('screen-choose')">Crear cuenta</button>
+
+            <div class="link-back" onclick="navTo('screen-welcome')">volver atrás</div>
+        </div>
+
+        <!-- SCREEN 3: CHOOSE WHAT TO DO -->
+        <div id="screen-choose" class="screen">
+            <h1>¿Qué te gustaría<br>hacer primero?</h1>
+            
+            <div class="grid-2x2">
+                <button class="grid-btn" onclick="navTo('screen-dashboard')">registrar<br>mi<br>mascota</button>
+                <button class="grid-btn" onclick="navTo('screen-dashboard')">buscar una<br>mascota<br>perdida</button>
+                <button class="grid-btn" onclick="navTo('screen-dashboard')">reportar una<br>mascota<br>encontrada</button>
+                <button class="grid-btn" onclick="navTo('screen-dashboard')">explorar<br>la<br>aplicación</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: LOGIN -->
+        <div id="screen-login" class="screen">
+            <h1>¿Ya tienes cuenta?</h1>
+            <p style="font-size: 14px; text-align: left; margin-left: 10px;">Si ya tienes una cuenta,<br>ingresa tus datos y verifica<br>tu número/correo electrónico</p>
+            
+            <div class="input-group">
+                <label>nombre de usuario</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-group">
+                <label>correo electrónico /<br>número de celular</label>
+                <input type="text">
+            </div>
+
+            <div class="input-group">
+                <label>contraseña</label>
+                <input type="password">
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 15px;" onclick="navTo('screen-dashboard')">Iniciar sesión</button>
+
+            <div class="link-back" onclick="navTo('screen-welcome')">volver atrás</div>
+        </div>
+
+        <!-- MAIN DASHBOARD (Simulated Post-Login Shell) -->
+        <div id="screen-dashboard" class="screen" style="padding: 20px; text-align: left;">
+            <h1 style="font-size: 24px;">Inicio</h1>
+            <p>Bienvenido a la aplicación. Aquí verás mascotas perdidas y encontradas cerca de ti.</p>
+            
+            <div style="background: var(--input-bg); border: 2px solid var(--border-dark); border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+                <strong style="font-family: var(--font-hand); font-size: 20px;">Max</strong><br>
+                Golden Retriever<br>
+                A 2.4 km de distancia<br>
+                <em>Perdido hace 2 días</em>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-item">Inicio</div>
+                <div class="nav-item">Buscar</div>
+                <div class="nav-item">Reportar</div>
+                <div class="nav-item">Mapa</div>
+                <div class="nav-item">Perfil</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple navigation function to switch between screens
+        function navTo(targetScreenId) {
+            // Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Show target screen
+            const target = document.getElementById(targetScreenId);
+            if(target) {
+                target.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
